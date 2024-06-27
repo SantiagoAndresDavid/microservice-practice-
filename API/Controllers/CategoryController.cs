@@ -1,6 +1,7 @@
 using API.Entities;
 using API.Interface;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace API.Controllers;
@@ -15,9 +16,14 @@ public class CategoryController : Controller
         _context = context;
     }
 
-    [HttpGet]
-    public IActionResult Get() => throw new NotImplementedException();
-    
+    [HttpGet("{Id}")]
+    public async Task<IActionResult> Get(Guid Id)
+    {
+        var response = await _context.Categories.Where(w => w.Id == Id).FirstOrDefaultAsync();
+        if (response == null) return NotFound();
+        return Ok(response);
+    }
+
     [Route("category")]
     [HttpPost]
     public async Task<Category> Post(Category category)
@@ -36,10 +42,20 @@ public class CategoryController : Controller
         }
     }
 
-    [HttpPut]
-    public IActionResult Put() => throw new NotImplementedException();
+    [HttpPut("{Id}")]
+    public async Task<IActionResult> Put(Category category, Guid Id)
+    {
+        if (Id != category.Id) throw new Exception();
+        var response = await _context.Categories.Where(w => w.Id == Id).FirstOrDefaultAsync();
+        if (response == null) return NotFound();
+        response.Description = category.Description;
+        await _context.SaveChangesAsync();
+        return Ok(response);
+    }
     
     [HttpDelete]
     public IActionResult Delet() => throw new NotImplementedException();
-    
 }
+    
+
+    
