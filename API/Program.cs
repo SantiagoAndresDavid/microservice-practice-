@@ -10,6 +10,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IAppDBContext, AppDBContext>();
 builder.Services.AddControllers();
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -20,9 +21,13 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
+app.UseRouting();
+app.UseAuthorization();
+
+app.UseEndpoints(endpoints =>
 {
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+    endpoints.MapControllers();
+});
+
+app.Run();
