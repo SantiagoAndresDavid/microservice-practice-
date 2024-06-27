@@ -1,5 +1,6 @@
 using API.Entities;
 using API.Interface;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -52,9 +53,16 @@ public class CategoryController : Controller
         await _context.SaveChangesAsync();
         return Ok(response);
     }
-    
+
     [HttpDelete]
-    public IActionResult Delet() => throw new NotImplementedException();
+    public async Task<IActionResult> Delete(Guid Id)
+    {
+        var response = await _context.Categories.Where(w => w.Id == Id).FirstOrDefaultAsync();
+        if (response == null) return NotFound();
+        _context.Categories.Remove(response);
+        await _context.SaveChangesAsync();
+        return Ok(Id);
+    }
 }
     
 
