@@ -40,7 +40,11 @@
           "dependencies": {
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
-              "version": "[8.0.5, )"
+              "version": "[8.0.6, )"
+            },
+            "Microsoft.Data.SqlClient": {
+              "target": "Package",
+              "version": "[5.2.1, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",

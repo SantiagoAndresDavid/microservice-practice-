@@ -1,6 +1,27 @@
 ﻿services:
-  api:
-    image: api
-    build:
-      context: .
-      dockerfile: Dockerfile
+  mssql:
+    hostname: mssql
+    image: mcr.microsoft.com/mssql/server:latest
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "<YourStrong@Passw0rd>"
+    ports:
+      - "1433:1433"
+    networks:
+      - mynetwork
+
+  backend:
+    hostname: backend
+    image: microservice-image:latest
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+    depends_on:
+      - mssql
+    ports:
+      - "8080:8080"
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
